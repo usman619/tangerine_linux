@@ -1,0 +1,10 @@
+Metadata-Version: 2.4
+Name: tangerine-linux
+Version: 0.1.0
+Summary: Drag + Shift local file converter radial wheel for Linux
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: PyQt6>=6.5.0
+Requires-Dist: Pillow>=10.0.0
+Requires-Dist: pypdf>=4.0.0
+Requires-Dist: pynput>=1.7.6

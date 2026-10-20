@@ -1,0 +1,2 @@
+[console_scripts]
+tangerine-linux = tangerine.main:main
