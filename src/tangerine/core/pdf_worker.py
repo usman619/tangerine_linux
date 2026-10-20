@@ -27,11 +27,23 @@ class PDFWorker:
         return created
 
     @staticmethod
-    def extract_text(src: Path, out_txt: Path) -> Path:
+    def extract_text_and_images(src: Path, out_txt: Path) -> list[str]:
         reader = PdfReader(str(src))
+        outputs: list[str] = []
         text_chunks = [page.extract_text() or "" for page in reader.pages]
-        out_txt.write_text("\n\n--- Page Break ---\n\n".join(text_chunks), encoding="utf-8")
-        return out_txt
+        if any(text_chunks):
+            out_txt.write_text("\n\n--- Page Break ---\n\n".join(text_chunks), encoding="utf-8")
+            outputs.append(out_txt.name)
+
+        # Also extract embedded images from PDF pages
+        img_count = 0
+        for p_idx, page in enumerate(reader.pages, start=1):
+            for image_file_object in page.images:
+                img_count += 1
+                img_out = src.parent / f"{src.stem}_p{p_idx}_img{img_count}_{image_file_object.name}"
+                img_out.write_bytes(image_file_object.data)
+                outputs.append(img_out.name)
+        return outputs
 
     @staticmethod
     def images_to_pdf(paths: list[Path], out_path: Path) -> Path:
